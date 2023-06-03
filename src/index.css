@@ -92,12 +92,23 @@ h1{
 
 .remove{
   background-color: rgb(236, 10, 198);
-  width:fit-content
+  width:fit-content;
+  margin-right: 10px;
+  margin-bottom: 5px;
 }
 
 .blog-btn{
-  text-align: end;
-  margin-right: 10px;
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  
+}
+.edit{
+  background-color: rgb(236, 10, 198);
+  width:fit-content;
+  margin-right: -42%;
+  margin-bottom: 5px;
 }
 /* Created with https://www.css-gradient.com */
 /* background: #565318;
