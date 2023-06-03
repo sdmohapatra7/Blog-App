@@ -15,6 +15,10 @@ export default function Blog() {
         // setContent('');
         setFormData({title:'',content:''});
     }
+    const handleDelete = (index)=>{
+        let restBlog = blogs.filter((blog,i)=>i!==index);
+        setBlogs(restBlog);
+    }
     
     return (
         <>
@@ -38,6 +42,9 @@ export default function Blog() {
             <div className='blog' key={index}>
                 <h3>{blog.title}</h3>
                 <p>{blog.content}</p>
+                <div className='blog-btn'>
+                    <button className='btn remove' onClick={()=>handleDelete(index)}>Delete</button>
+                </div>
             </div>
         ))}
         </>
