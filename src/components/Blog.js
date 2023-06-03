@@ -2,15 +2,18 @@ import React,{useState} from 'react'
 
 export default function Blog() {
 
-    const[title,setTitle]=useState('');
-    const[content,setContent]=useState('');
+    // const[title,setTitle]=useState('');
+    // const[content,setContent]=useState('');
+    const[formData,setFormData]=useState({title:'',content:''})
     const[blogs,setBlogs]=useState([]);
 
     const handleSubmit = (e)=>{
         e.preventDefault();
-        setBlogs([{title,content},...blogs]);
-        setTitle('');
-        setContent('');
+        setBlogs([{title:formData.title,
+                content:formData.content},...blogs]);
+        // setTitle('');
+        // setContent('');
+        setFormData({title:'',content:''});
     }
     
     return (
@@ -20,11 +23,11 @@ export default function Blog() {
             <form onSubmit={handleSubmit}>
                 {/* Row component to create a row for first input field */}
                 <Row label='Title'>
-                    <input className='input' placeholder="Enter the Title of the Blog here.." value={title} onChange={(e)=>setTitle(e.target.value)}/>
+                    <input className='input' placeholder="Enter the Title of the Blog here.." value={formData.title} onChange={(e)=>setFormData({title:e.target.value,content:formData.content})}/>
                 </Row>
                 {/* Row component to create a row for Text area field */}
                 <Row label='Content'>
-                    <textarea className='input content' placeholder="Content of the Blog goes here.." value={content} onChange={(e)=>setContent(e.target.value)}/>
+                    <textarea className='input content' placeholder="Content of the Blog goes here.." value={formData.content} onChange={(e)=>setFormData({title:formData.title,content:e.target.value})}/>
                 </Row>
                 <button className = "btn">ADD</button>
             </form>
