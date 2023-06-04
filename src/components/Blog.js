@@ -1,11 +1,24 @@
-import React,{useState,useRef,useEffect} from 'react'
+import React,{useState,useRef,useEffect,useReducer} from 'react'
+
+function blogsReducer(state,action){
+    switch(action.type){
+        case 'ADD':
+            return [action.blog,...state];
+        case 'Delete':
+            return state.filter((blog,index)=> index!==action.index);
+        default:
+            return [];        
+    }
+}
 
 export default function Blog() {
 
     // const[title,setTitle]=useState('');
     // const[content,setContent]=useState('');
     const[formData,setFormData]=useState({title:'',content:''})
-    const[blogs,setBlogs]=useState([]);
+    // const[blogs,setBlogs]=useState([]);
+    // const[editBlogs,setEditBlogs]=useState({title:'',content:''});
+    const[blogs,dispatch]=useReducer(blogsReducer,[]);
     const titleRef = useRef(null);
 
     useEffect(()=>{
@@ -23,19 +36,20 @@ export default function Blog() {
     const handleSubmit = (e)=>{
         e.preventDefault();
         
-        setBlogs([{title:formData.title,
-                content:formData.content},...blogs]);
+        // setBlogs([{title:formData.title,content:formData.content},...blogs]);
+        dispatch({type:'ADD',blog:{title:formData.title,content:formData.content}});
         // setTitle('');
         // setContent('');
         setFormData({title:'',content:''});
         titleRef.current.focus();
     }
     const handleDelete = (index)=>{
-        let restBlog = blogs.filter((blog,i)=>i!==index);
-        setBlogs(restBlog);
+        // let restBlog = blogs.filter((blog,i)=>i!==index);
+        // setBlogs(restBlog);
+        dispatch({type:'Delete',index:index})
     }
-    const handleEdit = ()=>{
-
+    const handleEdit = (index)=>{
+        
     }
     
     return (
