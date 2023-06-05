@@ -115,6 +115,9 @@ h1{
   margin: auto;
   
 }
+.darkMode{
+  background-color:black;
+}
 /* Created with https://www.css-gradient.com */
 /* background: #565318;
 background: -webkit-linear-gradient(right, #565318, #3C464E);

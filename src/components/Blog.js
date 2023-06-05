@@ -19,6 +19,7 @@ export default function Blog() {
     const [blogs, setBlogs] = useState([]);
     // const[editBlogs,setEditBlogs]=useState({title:'',content:''});
     const [search, setSearch] = useState('');
+    // const[darkMode,setDarkMode]=useState(false);
     // const[blogs,dispatch]=useReducer(blogsReducer,[]);
     const titleRef = useRef(null);
 
