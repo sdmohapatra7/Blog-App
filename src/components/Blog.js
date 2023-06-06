@@ -1,4 +1,7 @@
-import React, { useState, useRef, useEffect, useReducer } from 'react'
+import React, { useState, useRef, useEffect, useReducer } from 'react';
+import { db } from '../firebaseInit';
+import { doc, setDoc, collection, addDoc, getDocs, deleteDoc, onSnapshot } from "firebase/firestore";
+
 
 // function blogsReducer(state,action){
 //     switch(action.type){
@@ -35,22 +38,59 @@ export default function Blog() {
         }
     }, [blogs]);
 
-    const handleSubmit = (e) => {
+    useEffect(() => {
+        // async function fetchData() {
+        //     const snapShot = await getDocs(collection(db, "blogs"));
+        //     console.log(snapShot);
+        //     const blogs = snapShot.docs.map((doc) => {
+        //         return {
+        //             id: doc.id,
+        //             ...doc.data()
+        //         }
+        //     })
+        //     console.log(blogs);
+        //     setBlogs(blogs);
+        // }
+        // fetchData();
+        //get real times update..
+        const unsub = onSnapshot(collection(db, 'blogs'), (snapShot) => {
+            const blogs = snapShot.docs.map((doc) => {
+                return {
+                    id: doc.id,
+                    ...doc.data()
+                }
+            })
+            // console.log(blogs);
+            setBlogs(blogs);
+        })
+    }, []);
+
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        setBlogs([{ title: formData.title, content: formData.content }, ...blogs]);
+        // setBlogs([{ title: formData.title, content: formData.content }, ...blogs]);
         // dispatch({type:'ADD',blog:{title:formData.title,content:formData.content}});
         // setTitle('');
         // setContent('');
+        //using firebase
+        const docRef = collection(db, "blogs");
+        await addDoc(docRef, {
+            title: formData.title,
+            content: formData.content,
+            createdOn: new Date()
+        });
         setFormData({ title: '', content: '' });
         titleRef.current.focus();
     }
-    const handleDelete = (index) => {
-        let restBlog = blogs.filter((blog, i) => i !== index);
-        setBlogs(restBlog);
+    const handleDelete = async (id) => {
+        // let restBlog = blogs.filter((blog, i) => i !== id);
+        // setBlogs(restBlog);
+        const docRef = doc(db, "blogs", id);
+        await deleteDoc(docRef);
         // dispatch({type:'Delete',index:index})
     }
-    const handleEdit = (index) => {
+    const handleEdit = async(index,id) => {
         // Get the blog at the specified index
         const blogToEdit = blogs[index];
         // Set the formData state with the values of the blog to populate the form
@@ -68,7 +108,7 @@ export default function Blog() {
         <>
             <h1>Write A Blog!</h1>
             <div className="search">
-                <input className="input" type="text" placeholder="Search from wishList...." onChange={(e) => setSearch(e.target.value)}/>
+                <input className="input" type="text" placeholder="Search from wishList...." onChange={(e) => setSearch(e.target.value)} />
             </div>
             <div className='section'>
                 <form onSubmit={handleSubmit}>
@@ -90,8 +130,8 @@ export default function Blog() {
                     <h3>{blog.title}</h3>
                     <p>{blog.content}</p>
                     <div className='blog-btn'>
-                        <button className='btn edit' onClick={() => handleEdit(index)}>Edit</button>
-                        <button className='btn remove' onClick={() => handleDelete(index)}>Delete</button>
+                        <button className='btn edit' onClick={() => handleEdit(index,blog.id)}>Edit</button>
+                        <button className='btn remove' onClick={() => handleDelete(blog.id)}>Delete</button>
                     </div>
                 </div>
             ))}
